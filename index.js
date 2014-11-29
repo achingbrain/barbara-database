@@ -14,7 +14,6 @@ if(!process.env.BARBARA_PORT) {
 }
 
 var container = new Container()
-container.register('config', config)
 
 // set up logging
 var logger = container.createAndRegister('logger', winston.Logger, {
