@@ -1,78 +1,73 @@
-var Brew = require(__dirname + "/../../resources/Brew"),
-	sinon = require("sinon"),
-	should = require("should");
+var Brew = require(__dirname + "/../../lib/resources/Brew"),
+  sinon = require("sinon"),
+  expect = require("chai").expect
 
-var resource;
+describe("Brew", function() {
+  var resource
 
-module.exports["resources/Brew"] = {
-	setUp: function(done) {
-		resource = new Brew();
+  beforeEach(function() {
+    resource = new Brew()
+    resource._brewRepository = {
+      findById: sinon.stub(),
+      findByName: sinon.stub(),
+      findAll: sinon.stub()
+    }
+  })
 
-		done();
-	},
+  it("Should find brew", function(done) {
+    var brewId = "foo"
+    var brew = {}
+    resource._brewRepository.findById.withArgs(brewId, sinon.match.func).callsArgWith(1, undefined, brew)
 
-	"Should find brew": function( test ) {
-		var error = null;
-		var brew = {};
-		resource._brewRepository = {
-			findById: sinon.stub().callsArgWith(1, error, brew)
-		};
-		var brewId = "foo";
-		var request = {
-			params: {
-				brewId: brewId
-			},
-			reply: function(brew) {
-				var findByIdCall = resource._brewRepository.findById.getCall(0);
-				findByIdCall.calledWith(brewId, sinon.match.func);
+    var request = {
+      params: {
+        brewId: brewId
+      }
+    }
 
-				test.done();
-			}
-		};
+    resource.retrieve(request, function(error, foundBrew) {
+      var findByIdCall = resource._brewRepository.findById.getCall(0)
+      expect(findByIdCall.calledWith(brewId, sinon.match.func)).to.be.true
+      expect(foundBrew).to.equal(brew)
 
-		resource.retrieve(request);
-	},
+      done()
+    })
+  })
 
-	"Should find all brews": function( test ) {
-		var error = null;
-		var brews = [];
-		resource._brewRepository = {
-			findAll: sinon.stub().callsArgWith(0, error, brews)
-		};
-		var request = {
-			query: {},
-			reply: function(brews) {
-				var findAllCall = resource._brewRepository.findAll.getCall(0);
-				findAllCall.calledWith(sinon.match.func);
-				brews.should.be.array;
+  it("Should find all brews", function(done) {
+    var error = null
+    var brews = []
+    resource._brewRepository.findAll.callsArgWith(0, error, brews)
 
-				test.done();
-			}
-		};
+    var request = {
+      query: {}
+    }
 
-		resource.retrieveAll(request);
-	},
+    resource.retrieveAll(request, function(error, brews) {
+      var findAllCall = resource._brewRepository.findAll.getCall(0)
+      expect(findAllCall.calledWith(sinon.match.func)).to.be.true
+      expect(brews).to.be.an('array')
 
-	"Should find brews by name": function( test ) {
-		var error = null;
-		var brew = {};
-		resource._brewRepository = {
-			findByName: sinon.stub().callsArgWith(1, error, brew)
-		};
-		var name = "foo";
-		var request = {
-			query: {
-				name: name
-			},
-			reply: function(brew) {
-				var findAllCall = resource._brewRepository.findByName.getCall(0);
-				findAllCall.calledWith(sinon.match.func);
-				brew.should.not.be.null;
+      done()
+    })
+  })
 
-				test.done();
-			}
-		};
+  it("Should find brews by name", function(done) {
+    var error = null
+    var brew = {}
+    resource._brewRepository.findByName.callsArgWith(1, error, brew)
 
-		resource.retrieveAll(request);
-	}
-};
+    var name = "foo"
+    var request = {
+      query: {
+        name: name
+      }
+    }
+
+    resource.retrieveAll(request, function(error, brew) {
+      expect(brew).to.be.ok
+
+      done()
+    })
+  })
+})
