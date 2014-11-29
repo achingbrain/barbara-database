@@ -1,0 +1,32 @@
+{
+  "name": "barbara-database",
+  "version": "1.0.0",
+  "private": true,
+  "description": "REST endpoint and service orchestration",
+  "main": "statto.js",
+  "scripts": {
+    "test": "istanbul cover nodeunit test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/achingbrain/barbara-database.git"
+  },
+  "dependencies": {
+    "columbo": "^1.0",
+    "hapi": "^7.5.2",
+    "nano": "^6.0.2",
+    "nano-repository": "^0.0",
+    "rc": "^0.5.4",
+    "seaport": "^2.0",
+    "underscore.string": "^2.0",
+    "wantsit": "^1.0",
+    "winston": "^0.8.3"
+  },
+  "devDependencies": {
+    "chai": "^1.0",
+    "istanbul": "^0.3.2",
+    "mocha": "^2.0.1",
+    "sinon": "^1.0",
+    "testsuite": "^1.0"
+  }
+}
