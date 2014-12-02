@@ -16,7 +16,6 @@
     "hapi": "^7.5",
     "nano": "^6.0",
     "nano-repository": "^0.0",
-    "underscore.string": "^2.0",
     "wantsit": "^1.0",
     "winston": "^0.8"
   },

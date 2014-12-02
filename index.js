@@ -14,18 +14,8 @@ if(!process.env.BARBARA_PORT) {
 }
 
 var container = new Container()
+container.register('logger', console)
 
-// set up logging
-var logger = container.createAndRegister('logger', winston.Logger, {
-  transports: [
-  new (winston.transports.Console)({
-    timestamp: true,
-    colorize: true
-  })
-  ]
-})
-
-// database
 var connection = new Nano(process.env.BARBARA_COUCH_URL)
 container.register('connection', Nano)
 
@@ -44,8 +34,7 @@ container.createAndRegister('columbo', Columbo, {
   resourceDirectory: path.resolve(__dirname, './lib/resources'),
   resourceCreator: function(resource, name) {
     return container.createAndRegister(name + 'Resource', resource)
-  },
-  logger: logger
+  }
 })
 
 // start REST database server
@@ -56,5 +45,5 @@ var server = Hapi.createServer('0.0.0.0', process.env.BARBARA_PORT, {
 server.route(columbo.discover())
 server.ext('onPreResponse', container.find('nanoErrorTranslator'))
 server.start(function() {
-  logger.info('RESTServer', 'Running at', 'http://localhost:' + server.info.port)
+  console.info('RESTServer', 'Running at', 'http://localhost:' + server.info.port)
 })
