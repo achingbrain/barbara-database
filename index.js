@@ -5,13 +5,8 @@ var Container = require('wantsit').Container,
   winston = require('winston'),
   path = require('path')
 
-if(!process.env.BARBARA_COUCH_URL) {
-  throw new Error('Specify a BARBARA_COUCH_URL environmental variable')
-}
-
-if(!process.env.BARBARA_PORT) {
-  throw new Error('Specify a BARBARA_PORT environmental variable')
-}
+process.env.BARBARA_COUCH_URL = process.env.BARBARA_COUCH_URL || 'http://localhost:5984'
+process.env.BARBARA_PORT = parseInt(process.env.BARBARA_PORT, 10) || 8493
 
 var container = new Container()
 container.register('logger', console)
