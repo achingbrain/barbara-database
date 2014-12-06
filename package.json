@@ -15,7 +15,7 @@
     "columbo": "^1.0",
     "hapi": "^7.5",
     "nano": "^6.0",
-    "nano-repository": "^0.0",
+    "nano-repository": "^1.0",
     "wantsit": "^1.0",
     "winston": "^0.8"
   },
